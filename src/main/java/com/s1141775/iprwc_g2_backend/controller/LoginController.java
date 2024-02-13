@@ -7,9 +7,7 @@ import com.s1141775.iprwc_g2_backend.model.RegisterCredentials;
 import com.s1141775.iprwc_g2_backend.service.AccountService;
 import com.s1141775.iprwc_g2_backend.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -24,11 +22,11 @@ public class LoginController
     }
 
     @PostMapping("/register")
-    private ResponseEntity<String> register(RegisterCredentials registerCredentials){
+    private ResponseEntity<String> register(@RequestBody RegisterCredentials registerCredentials){
         try{
             //Create account
-            Account newAccount = new Account(registerCredentials.username, registerCredentials.password, registerCredentials.email, AccountType.Customer);
-            this.accountService.save(newAccount);
+            Account account = new Account(registerCredentials.username, registerCredentials.password, registerCredentials.email, AccountType.Customer);
+            this.accountService.save(account);
 
             //Return JWT-token
             LoginCredentials loginCredentials = new LoginCredentials(registerCredentials.username, registerCredentials.password);
@@ -41,7 +39,7 @@ public class LoginController
     }
 
     @PostMapping ("/login")
-    private ResponseEntity<String> login(LoginCredentials loginCredentials){
+    private ResponseEntity<String> login(@RequestBody LoginCredentials loginCredentials){
         if(!checkIfAccountExists(loginCredentials.username)){
             return ResponseEntity.notFound().build();
         }
