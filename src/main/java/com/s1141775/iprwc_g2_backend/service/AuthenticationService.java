@@ -13,12 +13,7 @@ public class AuthenticationService
     }
 
     public String signUp(LoginCredentials loginCredentials){
-        System.out.println("signUp()");
-
-        String jwtToken = jwtService.generateFromUsername(loginCredentials.username);
-        System.out.println(jwtToken);
-
-        return jwtToken;
+        return jwtService.generateFromUsername(loginCredentials.username);
     }
 
 

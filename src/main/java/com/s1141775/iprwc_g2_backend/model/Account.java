@@ -18,8 +18,7 @@ public class Account
     @Column(name = "type")
     private AccountType type;
 
-    public Account(String id, String username, String password, String email, AccountType type) {
-        this.id = id;
+    public Account(String username, String password, String email, AccountType type) {
         this.username = username;
         this.password = password;
         this.email = email;
