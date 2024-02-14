@@ -23,6 +23,11 @@ public class LoginController
 
     @PostMapping("/register")
     private ResponseEntity<String> register(@RequestBody RegisterCredentials registerCredentials){
+        //Check if username is in use
+        if(checkIfAccountExists(registerCredentials.username)){
+            return ResponseEntity.badRequest().body("Username in use");
+        }
+
         try{
             //Create account
             Account account = new Account(registerCredentials.username, registerCredentials.password, registerCredentials.email, AccountType.Customer);
@@ -34,22 +39,32 @@ public class LoginController
             return ResponseEntity.ok(JWTToken);
 
         }catch (Exception e){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Error during creation of account");
         }
     }
 
     @PostMapping ("/login")
-    private ResponseEntity<String> login(@RequestBody LoginCredentials loginCredentials){
-        if(!checkIfAccountExists(loginCredentials.username)){
-            return ResponseEntity.notFound().build();
+    private ResponseEntity<String> login(@RequestBody LoginCredentials credentials){
+        //Check if account exists
+        if(!checkIfAccountExists(credentials.username)){
+            return ResponseEntity.badRequest().build();
         }
-        String JWTToken = authenticationService.signUp(loginCredentials);
+        //Check if password is correct
+        if(!checkIfPasswordIsCorrect(credentials)){
+            return ResponseEntity.badRequest().build();
+        }
+        String JWTToken = authenticationService.signUp(credentials);
         return ResponseEntity.ok(JWTToken);
     }
 
     private boolean checkIfAccountExists(String username){
-        if(accountService.findById(username).isPresent()){
-            return true;
+        return accountService.findByName(username).isPresent();
+    }
+
+    private boolean checkIfPasswordIsCorrect(LoginCredentials credentials){
+        if(this.accountService.findByName(credentials.username).isPresent()){
+            String password = this.accountService.findByName(credentials.username).get().getPassword();
+            return password.equals(credentials.password);
         }
         return false;
     }
