@@ -1,9 +1,6 @@
 package com.s1141775.iprwc_g2_backend.controller;
 
-import com.s1141775.iprwc_g2_backend.model.Account;
-import com.s1141775.iprwc_g2_backend.model.AccountType;
-import com.s1141775.iprwc_g2_backend.model.LoginCredentials;
-import com.s1141775.iprwc_g2_backend.model.RegisterCredentials;
+import com.s1141775.iprwc_g2_backend.model.*;
 import com.s1141775.iprwc_g2_backend.service.AccountService;
 import com.s1141775.iprwc_g2_backend.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +50,9 @@ public class LoginController
             return ResponseEntity.badRequest().body("Username or password is incorrect");
         }
         String JWTToken = authenticationService.signUp();
+        Account account = this.accountService.findByName(credentials.username).get();
+        AccountJWTDTO accountJwtDto = new AccountJWTDTO(account, JWTToken);
+
         return ResponseEntity.ok(JWTToken);
     }
 
