@@ -34,8 +34,7 @@ public class LoginController
             this.accountService.save(account);
 
             //Return JWT-token
-            LoginCredentials loginCredentials = new LoginCredentials(registerCredentials.username, registerCredentials.password);
-            String JWTToken = this.authenticationService.signUp(loginCredentials);
+            String JWTToken = this.authenticationService.signUp();
             return ResponseEntity.ok(JWTToken);
 
         }catch (Exception e){
@@ -47,13 +46,13 @@ public class LoginController
     private ResponseEntity<String> login(@RequestBody LoginCredentials credentials){
         //Check if account exists
         if(!checkIfAccountExists(credentials.username)){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Username or password is incorrect");
         }
         //Check if password is correct
         if(!checkIfPasswordIsCorrect(credentials)){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Username or password is incorrect");
         }
-        String JWTToken = authenticationService.signUp(credentials);
+        String JWTToken = authenticationService.signUp();
         return ResponseEntity.ok(JWTToken);
     }
 

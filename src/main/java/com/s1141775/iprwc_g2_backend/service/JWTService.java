@@ -21,11 +21,10 @@ public class JWTService {
     Long jwtExpirationMs;
 
 
-    public String generateFromUsername(String username){
+    public String generateFromUsername(){
         var jwt = Jwts
                 .builder()
                 .setClaims(new HashMap<>())
-                .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)

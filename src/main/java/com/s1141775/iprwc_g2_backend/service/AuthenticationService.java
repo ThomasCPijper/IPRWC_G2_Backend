@@ -12,8 +12,8 @@ public class AuthenticationService
         this.jwtService = jwtService;
     }
 
-    public String signUp(LoginCredentials loginCredentials){
-        return jwtService.generateFromUsername(loginCredentials.username);
+    public String signUp(){
+        return jwtService.generateFromUsername();
     }
 
 
