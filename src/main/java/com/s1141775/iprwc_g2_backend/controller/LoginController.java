@@ -57,6 +57,7 @@ public class LoginController
 
         deleteOldToken(this.accountService.findByName(credentials.username).get());
 
+        //Create token
         String JWTToken = authenticationService.signUp();
         Account account = this.accountService.findByName(credentials.username).get();
         AccountJWTDTO accountJwtDto = new AccountJWTDTO(account, JWTToken);
