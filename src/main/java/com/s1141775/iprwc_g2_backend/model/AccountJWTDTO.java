@@ -3,6 +3,7 @@ package com.s1141775.iprwc_g2_backend.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "account_jwt")
 public class AccountJWTDTO {
 
     @Id

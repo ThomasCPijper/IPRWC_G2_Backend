@@ -1,8 +1,11 @@
 package com.s1141775.iprwc_g2_backend.service;
 
 import com.s1141775.iprwc_g2_backend.dao.JwtDtoRepository;
+import com.s1141775.iprwc_g2_backend.model.Account;
 import com.s1141775.iprwc_g2_backend.model.AccountJWTDTO;
+import org.springframework.stereotype.Service;
 
+@Service
 public class JwtDtoServiceImpl implements JwtDtoService{
     private final JwtDtoRepository jwtDtoRepository;
 
@@ -13,6 +16,11 @@ public class JwtDtoServiceImpl implements JwtDtoService{
     @Override
     public AccountJWTDTO save(AccountJWTDTO accountJWTDTO) {
         return this.jwtDtoRepository.save(accountJWTDTO);
+    }
+
+    @Override
+    public AccountJWTDTO getByAccount(Account account) {
+        return this.jwtDtoRepository.getByAccount(account);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.s1141775.iprwc_g2_backend.controller;
 import com.s1141775.iprwc_g2_backend.model.*;
 import com.s1141775.iprwc_g2_backend.service.AccountService;
 import com.s1141775.iprwc_g2_backend.service.AuthenticationService;
+import com.s1141775.iprwc_g2_backend.service.JwtDtoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +13,12 @@ public class LoginController
 {
     private final AuthenticationService authenticationService;
     private final AccountService accountService;
+    private final JwtDtoService jwtDtoService;
 
-    public LoginController(AuthenticationService authenticationService, AccountService accountService) {
+    public LoginController(AuthenticationService authenticationService, AccountService accountService, JwtDtoService jwtDtoService) {
         this.authenticationService = authenticationService;
         this.accountService = accountService;
+        this.jwtDtoService = jwtDtoService;
     }
 
     @PostMapping("/register")
@@ -32,6 +35,8 @@ public class LoginController
 
             //Return JWT-token
             String JWTToken = this.authenticationService.signUp();
+            AccountJWTDTO accountJwtDto = new AccountJWTDTO(account, JWTToken);
+            this.jwtDtoService.save(accountJwtDto);
             return ResponseEntity.ok(JWTToken);
 
         }catch (Exception e){
@@ -49,11 +54,23 @@ public class LoginController
         if(!checkIfPasswordIsCorrect(credentials)){
             return ResponseEntity.badRequest().body("Username or password is incorrect");
         }
+
+        deleteOldToken(this.accountService.findByName(credentials.username).get());
+
         String JWTToken = authenticationService.signUp();
         Account account = this.accountService.findByName(credentials.username).get();
         AccountJWTDTO accountJwtDto = new AccountJWTDTO(account, JWTToken);
+        this.jwtDtoService.save(accountJwtDto);
 
         return ResponseEntity.ok(JWTToken);
+    }
+
+    private void deleteOldToken(Account account){
+        if(this.jwtDtoService.getByAccount(account) == null){
+            return;
+        }
+        AccountJWTDTO accountJWTDTO = this.jwtDtoService.getByAccount(account);
+        this.jwtDtoService.delete(accountJWTDTO);
     }
 
     private boolean checkIfAccountExists(String username){
