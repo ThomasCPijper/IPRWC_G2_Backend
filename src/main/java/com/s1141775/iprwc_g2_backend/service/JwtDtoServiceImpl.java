@@ -24,6 +24,11 @@ public class JwtDtoServiceImpl implements JwtDtoService{
     }
 
     @Override
+    public AccountJWTDTO getByJwtToken(String jwtToken) {
+        return this.jwtDtoRepository.getByJwtToken(jwtToken);
+    }
+
+    @Override
     public void delete(AccountJWTDTO accountJWTDTO) {
         this.jwtDtoRepository.delete(accountJWTDTO);
     }
