@@ -14,11 +14,11 @@ public class AccountJWTDTO {
     @JoinColumn(name = "account")
     private Account account;
     @Column(name = "jwt_token")
-    private String JwtToken;
+    private String jwtToken;
 
     public AccountJWTDTO(Account account, String jwtToken) {
         this.account = account;
-        JwtToken = jwtToken;
+        this.jwtToken = jwtToken;
     }
 
     public AccountJWTDTO() {}
@@ -40,10 +40,10 @@ public class AccountJWTDTO {
     }
 
     public String getJwtToken() {
-        return JwtToken;
+        return jwtToken;
     }
 
     public void setJwtToken(String jwtToken) {
-        JwtToken = jwtToken;
+        jwtToken = jwtToken;
     }
 }

@@ -5,6 +5,8 @@ import com.s1141775.iprwc_g2_backend.model.Account;
 import com.s1141775.iprwc_g2_backend.model.AccountJWTDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class JwtDtoServiceImpl implements JwtDtoService{
     private final JwtDtoRepository jwtDtoRepository;
@@ -24,8 +26,8 @@ public class JwtDtoServiceImpl implements JwtDtoService{
     }
 
     @Override
-    public AccountJWTDTO getByJwtToken(String jwtToken) {
-        return this.jwtDtoRepository.getByJwtToken(jwtToken);
+    public Optional<AccountJWTDTO> getByJwtToken(String jwtToken) {
+        return Optional.ofNullable(this.jwtDtoRepository.getByJwtToken(jwtToken));
     }
 
     @Override

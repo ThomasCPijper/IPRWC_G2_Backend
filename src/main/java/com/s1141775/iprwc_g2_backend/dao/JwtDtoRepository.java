@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface JwtDtoRepository extends CrudRepository<AccountJWTDTO, String> {
     AccountJWTDTO getByAccount(Account account);
-    AccountJWTDTO getByJwtToken(String jwtToken);
+    AccountJWTDTO getByJwtToken(String token);
 }

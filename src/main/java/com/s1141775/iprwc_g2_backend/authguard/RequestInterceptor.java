@@ -1,8 +1,9 @@
 package com.s1141775.iprwc_g2_backend.authguard;
 
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.s1141775.iprwc_g2_backend.model.Account;
-import com.s1141775.iprwc_g2_backend.model.AccountJWTDTO;
 import com.s1141775.iprwc_g2_backend.model.AccountType;
 import com.s1141775.iprwc_g2_backend.service.JwtDtoService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,8 +13,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
 @Component
 public class RequestInterceptor implements HandlerInterceptor {
 
@@ -27,15 +31,15 @@ public class RequestInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) {
         String token = extractToken(request);
         String endpoint = request.getRequestURI();
-        System.out.println("preHandle()");
-        System.out.println("Token: " + token);
-        System.out.println("Requested endpoint: " + endpoint);
 
+        //Add whitelisted endpoints to list
         List<String> whitelistedEndpoints = new ArrayList<>();
         whitelistedEndpoints.add("/register");
         whitelistedEndpoints.add("/login");
         whitelistedEndpoints.add("/order");
         whitelistedEndpoints.add("/products");
+
+        //Check if requested endpoint is in list
         if(!whitelistedEndpoints.contains(endpoint)){
             return checkJwtToken(token);
         }
@@ -51,11 +55,31 @@ public class RequestInterceptor implements HandlerInterceptor {
     }
 
     private boolean checkJwtToken(String jwtToken){
+
+        //Check if token is not null
+        if(jwtToken == null || jwtToken.isEmpty()){
+            return false;
+        }
+
+        //Check if token is expired
+        if(isTokenExpired(jwtToken)){
+            return false;
+        }
+
+        //Check if account is an Admin
         if(this.jwtDtoService.getByJwtToken(jwtToken).isPresent()){
             Account account = this.jwtDtoService.getByJwtToken(jwtToken).get().getAccount();
             return account.getType().equals(AccountType.Admin);
         }
+
         return false;
+    }
+
+    private boolean isTokenExpired(String token){
+        DecodedJWT decodedJWT = JWT.decode(token);
+        Date expiration = decodedJWT.getExpiresAt();
+        Date now = Date.from(Instant.now());
+        return expiration.before(now);
     }
 
     @Override
