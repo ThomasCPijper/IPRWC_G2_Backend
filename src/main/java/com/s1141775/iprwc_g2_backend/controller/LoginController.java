@@ -30,7 +30,11 @@ public class LoginController
 
         try{
             //Create account
-            Account account = new Account(registerCredentials.username, registerCredentials.password, registerCredentials.email, AccountType.Customer);
+            Account account = new Account();
+            account.setUsername(registerCredentials.username);
+            account.setPassword(registerCredentials.password);
+            account.setEmail(registerCredentials.email);
+            account.setType(AccountType.Customer);
             this.accountService.save(account);
 
             //Return JWT-token
