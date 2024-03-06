@@ -7,6 +7,13 @@ import com.s1141775.iprwc_g2_backend.service.JwtDtoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
+import java.util.Optional;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class LoginController
@@ -32,7 +39,12 @@ public class LoginController
             //Create account
             Account account = new Account();
             account.setUsername(registerCredentials.username);
-            account.setPassword(registerCredentials.password);
+
+            String salt = generateRandomSalt();
+            String hashedPassword = hashPassword(registerCredentials.password, salt);
+
+            account.setPassword(hashedPassword);
+            account.setSalt(salt);
             account.setEmail(registerCredentials.email);
             account.setType(AccountType.Customer);
             this.accountService.save(account);
@@ -83,10 +95,32 @@ public class LoginController
     }
 
     private boolean checkIfPasswordIsCorrect(LoginCredentials credentials){
-        if(this.accountService.findByName(credentials.username).isPresent()){
-            String password = this.accountService.findByName(credentials.username).get().getPassword();
-            return password.equals(credentials.password);
+        Optional<Account> optionalAccount = this.accountService.findByName(credentials.username);
+        if(optionalAccount.isPresent()){
+            Account account = optionalAccount.get();
+            String password = hashPassword(account.getPassword(), account.getSalt());
+            return password.equals(hashPassword(credentials.password, account.getSalt()));
         }
         return false;
+    }
+
+    private String generateRandomSalt() {
+        SecureRandom random = new SecureRandom();
+        byte[] saltBytes = new byte[16];
+        random.nextBytes(saltBytes);
+        return Base64.getEncoder().encodeToString(saltBytes);
+    }
+
+    private String hashPassword(String password, String salt) {
+        String saltedPassword = password + salt;
+
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = messageDigest.digest(saltedPassword.getBytes(StandardCharsets.UTF_8));
+
+            return Base64.getEncoder().encodeToString(hashedBytes);
+        } catch (NoSuchAlgorithmException stacktrace) {
+            throw new RuntimeException("Error hashing password", stacktrace);
+        }
     }
 }

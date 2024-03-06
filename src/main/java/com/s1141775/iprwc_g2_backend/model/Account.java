@@ -13,14 +13,18 @@ public class Account
     private String username;
     @Column(name = "password")
     private String password;
+
+    @Column(name = "salt")
+    private String salt;
     @Column(name = "email")
     private String email;
     @Column(name = "type")
     private AccountType type;
 
-    public Account(String username, String password, String email, AccountType type) {
+    public Account(String username, String password, String salt, String email, AccountType type) {
         this.username = username;
         this.password = password;
+        this.salt = salt;
         this.email = email;
         this.type = type;
     }
@@ -49,6 +53,14 @@ public class Account
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public String getEmail() {
