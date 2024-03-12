@@ -24,7 +24,7 @@ public class OrderController {
             return ResponseEntity.ok().body("Order saved succesfully");
         }
 
-        return ResponseEntity.badRequest().body("Error in adding Order");
+        return ResponseEntity.badRequest().body("Error in saving Order");
     }
 
     private BackendOrder mapToBackend(FrontendOrder frontendOrder){

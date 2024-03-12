@@ -11,17 +11,14 @@ public class FrontendOrder {
 
     private ProductInShoppingCart[] products;
 
-    private String customerName;
-
     private String email;
 
     private String address;
 
-    public FrontendOrder(String name, String customer, ProductInShoppingCart[] products, String customerName, String email, String address) {
+    public FrontendOrder(String name, String customer, ProductInShoppingCart[] products, String email, String address) {
         this.name = name;
         this.customer = customer;
         this.products = products;
-        this.customerName = customerName;
         this.email = email;
         this.address = address;
     }
@@ -50,13 +47,6 @@ public class FrontendOrder {
         this.products = products;
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
 
     public String getEmail() {
         return email;
