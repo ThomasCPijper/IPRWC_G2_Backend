@@ -39,8 +39,6 @@ public class RequestInterceptor implements HandlerInterceptor {
         whitelistedEndpoints.add("/order");
         whitelistedEndpoints.add("/products");
 
-        System.out.println("preHandle(): " + token);
-
         //Check if requested endpoint is in list
         if(!whitelistedEndpoints.contains(endpoint)){
             return checkJwtToken(token);
@@ -57,8 +55,6 @@ public class RequestInterceptor implements HandlerInterceptor {
     }
 
     private boolean checkJwtToken(String jwtToken){
-        System.out.println("CheckToken-token: " + jwtToken);
-
         //Check if token is not null
         if(jwtToken == null || jwtToken.isEmpty()){
             System.out.println("Blocked, token is null");

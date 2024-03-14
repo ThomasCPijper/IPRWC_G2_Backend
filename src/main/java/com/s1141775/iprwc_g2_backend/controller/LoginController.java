@@ -41,10 +41,13 @@ public class LoginController
             account.setUsername(registerCredentials.username);
 
             String salt = generateRandomSalt();
-            String hashedPassword = hashPassword(registerCredentials.password, salt);
+            String hashedPassword = hashPassword(registerCredentials.getPassword(), salt);
+            System.out.println(registerCredentials.getPassword());
+            System.out.println(hashedPassword);
 
             account.setPassword(hashedPassword);
             account.setSalt(salt);
+            System.out.println(salt);
             account.setEmail(registerCredentials.email);
             account.setType(AccountType.Customer);
             this.accountService.save(account);
@@ -98,8 +101,8 @@ public class LoginController
         Optional<Account> optionalAccount = this.accountService.findByName(credentials.username);
         if(optionalAccount.isPresent()){
             Account account = optionalAccount.get();
-            String password = hashPassword(account.getPassword(), account.getSalt());
-            return password.equals(hashPassword(credentials.password, account.getSalt()));
+            String hashedPassword = hashPassword(credentials.password, account.getSalt());
+            return account.getPassword().equals(hashedPassword);
         }
         return false;
     }
