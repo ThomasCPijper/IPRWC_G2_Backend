@@ -9,11 +9,13 @@ public class BackendOrder {
     @Id
     private String id;
 
+    @Column(name = "name")
     private String name;
+    @Column(name = "customer")
     private String customer;
-
+    @Column(name = "email")
     private String email;
-
+    @Column(name = "address")
     private String address;
 
     public BackendOrder() {

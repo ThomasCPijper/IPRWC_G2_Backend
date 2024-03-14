@@ -5,7 +5,7 @@ import java.util.List;
 
 public class FrontendOrder {
 
-
+    private String id;
     private String name;
     private String customer;
 
@@ -15,12 +15,21 @@ public class FrontendOrder {
 
     private String address;
 
-    public FrontendOrder(String name, String customer, ProductInShoppingCart[] products, String email, String address) {
+    public FrontendOrder(String id, String name, String customer, ProductInShoppingCart[] products, String email, String address) {
+        this.id = id;
         this.name = name;
         this.customer = customer;
         this.products = products;
         this.email = email;
         this.address = address;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

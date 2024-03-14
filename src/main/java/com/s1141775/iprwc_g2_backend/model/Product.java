@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "product")
-public class BackendProduct {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -16,13 +16,14 @@ public class BackendProduct {
     @Column(name = "cost")
     private double cost;
 
-    public BackendProduct(String name, String image, double cost) {
+    public Product(String id, String name, String image, double cost) {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.cost = cost;
     }
 
-    public BackendProduct() {
+    public Product() {
     }
 
     public String getId() {

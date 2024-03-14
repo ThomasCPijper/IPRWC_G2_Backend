@@ -3,21 +3,24 @@ package com.s1141775.iprwc_g2_backend.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "product_order")
 public class ProductInShoppingCart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @ManyToOne
+    @JoinColumn(name = "order_")
     private BackendOrder order;
 
     @ManyToOne
-    private BackendProduct product;
+    @JoinColumn(name = "product")
+    private Product product;
 
     private int quantity;
 
-    public ProductInShoppingCart(BackendOrder order, BackendProduct product, int numberOfProducts) {
+    public ProductInShoppingCart(String id, BackendOrder order, Product product, int numberOfProducts) {
+        this.id = id;
         this.order = order;
         this.product = product;
         this.quantity = numberOfProducts;
@@ -42,11 +45,11 @@ public class ProductInShoppingCart {
         this.order = order;
     }
 
-    public BackendProduct getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct( BackendProduct product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 

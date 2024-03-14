@@ -36,7 +36,7 @@ public class RequestInterceptor implements HandlerInterceptor {
         List<String> whitelistedEndpoints = new ArrayList<>();
         whitelistedEndpoints.add("/register");
         whitelistedEndpoints.add("/login");
-        whitelistedEndpoints.add("/order");
+        whitelistedEndpoints.add("/addOrder");
         whitelistedEndpoints.add("/products");
 
         //Check if requested endpoint is in list
