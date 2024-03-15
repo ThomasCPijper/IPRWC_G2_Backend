@@ -16,7 +16,7 @@ public class Account
 
     @Column(name = "salt")
     private String salt;
-    @Column(name = "email")
+    @Column(name = "emailt")
     private String email;
     @Column(name = "type")
     private AccountType type;

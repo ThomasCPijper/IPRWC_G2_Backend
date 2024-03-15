@@ -14,7 +14,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 public class LoginController
 {
@@ -42,12 +42,9 @@ public class LoginController
 
             String salt = generateRandomSalt();
             String hashedPassword = hashPassword(registerCredentials.getPassword(), salt);
-            System.out.println(registerCredentials.getPassword());
-            System.out.println(hashedPassword);
 
             account.setPassword(hashedPassword);
             account.setSalt(salt);
-            System.out.println(salt);
             account.setEmail(registerCredentials.email);
             account.setType(AccountType.Customer);
             this.accountService.save(account);

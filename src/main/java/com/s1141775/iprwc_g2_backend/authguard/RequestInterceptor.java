@@ -57,13 +57,11 @@ public class RequestInterceptor implements HandlerInterceptor {
     private boolean checkJwtToken(String jwtToken){
         //Check if token is not null
         if(jwtToken == null || jwtToken.isEmpty()){
-            System.out.println("Blocked, token is null");
             return false;
         }
 
         //Check if token is expired
         if(isTokenExpired(jwtToken)){
-            System.out.println("Blocked, token is expired");
             return false;
         }
 
@@ -72,13 +70,12 @@ public class RequestInterceptor implements HandlerInterceptor {
             Account account = this.jwtDtoService.getByJwtToken(jwtToken).get().getAccount();
 
             if(account.getType().equals(AccountType.Customer)){
-                System.out.println("Account is an customer");
+                return false;
             }
 
             return account.getType().equals(AccountType.Admin);
         }
 
-        System.out.println("Blocked, token is not present");
         return false;
     }
 
